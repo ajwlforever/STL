@@ -50,8 +50,8 @@ string press;//出版社名
 
 
 public:
-Book(int x,string y,string z,string b):book_no(x),book_name(y),author(z),press(b){if(state!=1)state=0;}
-Book(){if(state!=1)state=0;};
+Book(int x,string y,string z,string b,int t):book_no(x),book_name(y),author(z),press(b),state(t){}
+Book(){};
 
 
 void setbook_no(int x){book_no=x;}      //图书信息的录入
@@ -83,12 +83,13 @@ Book(const Book & A)
     book_name=A.book_name;
     author=A.author;
     press=A.press;
+    state=A.state;
 }
 };
 
 istream & operator>>(istream & input,Book & A)
 {
-    input>>A.book_no>>A.book_name>>A.author>>A.press;
+    input>>A.book_no>>A.book_name>>A.author>>A.press>>A.state;
     return input;
 }
 ostream & operator<<(ostream & output,Book & A)
@@ -300,18 +301,18 @@ class Reader  //读者的信息： 姓名，学号，借阅的书，
     void display();
 };
  void Reader::add(Book A)
- {
-     r.push_back(A);
+ {    cout<<A.getstate()<<endl;
+    r.push_back(A);
      int i=r.size();
-     m1.insert(make_pair(A.getbook_no(),i-1));
+     m1.insert(make_pair(A.getbook_no(),i-1)); //书号放入m1中
 
  }
 void Reader::giveback(int x)
 {
    mit2=m1.find(x);
    if(mit2!=m1.end())
-   old_r.push_back(r[mit2->second]);
-   r.erase(r.begin()+mit2->second);
+   old_r.push_back(r[mit2->second]);  //放入历史记录中
+   r.erase(r.begin()+mit2->second);    //从现有记录中清除
 }
 void Reader::display()
 {
@@ -322,19 +323,20 @@ void Reader::display()
 }
 int main()
 {
-    int x,y;
-    string z;
+int x,y;
+string z;
 Book a,b;
-bool bb=true;
+
 cin>>y>>z;
 cin>>a>>b;
-a.setstate(bb);
+
 Time t(2018,5,24);
 a.settime(t);
-b.setstate(bb);
 b.settime(t);
 Reader u(z,y);
 cout<<b;
+cout<<a.getstate()<<endl;
+cout<<b.getstate()<<endl;
 u.add(a);
 u.add(b);
 cin>>x;
