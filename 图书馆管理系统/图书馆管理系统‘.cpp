@@ -284,6 +284,7 @@ void BookBase::save()
 
 class Reader  //读者的信息： 姓名，学号，借阅的书，
 {
+
     string name;
     int no;
     vector<Book>r;
@@ -299,10 +300,16 @@ class Reader  //读者的信息： 姓名，学号，借阅的书，
     void add(Book A);
     void giveback(int x);
     void display();
+    friend istream & operator >>(istream & input,const Reader & )
 };
+istream & operator >>(istream & input,const Reader & A)
+{
+    input>>no>>name;
+    return input;
+}
  void Reader::add(Book A)
- {    cout<<A.getstate()<<endl;
-    r.push_back(A);
+ {
+     r.push_back(A);
      int i=r.size();
      m1.insert(make_pair(A.getbook_no(),i-1)); //书号放入m1中
 
@@ -321,27 +328,49 @@ void Reader::display()
     for(it=r.begin();it!=r.end();it++)
     cout<<*it;
 }
+
+
+
+class ReaderBase
+{
+    vector<Reader>v;
+    vector<Reader>::iterator it;
+
+    public:
+    ReaderBase(){};
+
+    void add();
+
+};
+void ReaderBase::add()
+{
+    Reader r;
+    cin>>r;
+    v.push_back(r);
+}
+
+class Reader_op
+{   ReaderBase u;
+    BookBase t;
+    public :
+    Reader_op(ReaderBase u,BookBase t):u(u),t(t){};
+    void borrow(int x,int y);
+    void giveback(int x,int y);
+};
+void Reader_op::borrow()
+{   int x,y,z,b,b1;
+    cin>>x>>y;
+    cout<<"请输入时间：年月日"<<endl;
+    cin>>z>>b>>b1;
+    int x1=u.search1(x);
+    int y1=t.search1(y);
+    t.v.(y1)
+    u.v.(x1).add();    //从t书库中找到书号为y的书给学号为x的读者。
+
+}
+
 int main()
 {
-int x,y;
-string z;
-Book a,b;
-
-cin>>y>>z;
-cin>>a>>b;
-
-Time t(2018,5,24);
-a.settime(t);
-b.settime(t);
-Reader u(z,y);
-cout<<b;
-cout<<a.getstate()<<endl;
-cout<<b.getstate()<<endl;
-u.add(a);
-u.add(b);
-cin>>x;
-u.giveback(x);
-u.display();
 
 }
 
